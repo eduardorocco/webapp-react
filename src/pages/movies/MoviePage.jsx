@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom'
 const API_URL = 'http://localhost:3000/movies'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Card from 'react-bootstrap/Card'
 
 export default function MoviePage() {
 
@@ -12,19 +14,38 @@ export default function MoviePage() {
 
     function fetchMovie() {
         axios.get(`${API_URL}/${id}`).then(response => setMovie(response.data)
-    ).catch(error => console.error(error))
+        ).catch(error => console.error(error))
     }
+
 
     useEffect(() => { fetchMovie() }, [id])
 
-
+    console.log(movie.reviews);
     return (
         <Container>
             <Row>
                 <h1>{movie.title}</h1>
-                <img src={`http://localhost:3000/movies_cover/${movie.image}`} alt={movie.title} />
-                <p>{movie.abstract}</p>
+                <Col>
+                    <p>{movie.abstract}</p>
+                    <p>{movie.director}</p>
+                    <p>{movie.release_year}</p>
+                    <p>{movie.avg_vote}</p>
+                </Col>
+                <Col>
+                    <img src={movie.image} alt={movie.title} />
+                </Col>
             </Row>
+            <Row>
+                <h2>Reviews</h2>
+                {movie.reviews && movie.reviews.map(review => (
+                    <Card key={review.id}>
+                        <Card.Body>
+                            <Card.Title>{review.name}</Card.Title>
+                            <Card.Text>{review.text}</Card.Text>
+                        </Card.Body>
+                    </Card>
+                ))}
+            </Row>  
         </Container>
-    )   
+    )
 }
