@@ -5,7 +5,7 @@ export default function MovieCard({ movie }) {
     const { title, director, genre, image, abstract } = movie;
     return (
         <Card style={{ width: '18rem' }}>
-      <Card.Img variant="top" src="holder.js/100px180" />
+      <Card.Img variant="top" src={image} />
       <Card.Body>
         <Card.Title>{title}</Card.Title>
         <Card.Subtitle className="mb-2">{director}</Card.Subtitle>
