@@ -1,5 +1,6 @@
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
+import Button from 'react-bootstrap/Button'
+import { Link } from 'react-router-dom'
 
 export default function MovieCard({ movie }) {
     const { title, director, genre, image, abstract } = movie;
@@ -13,7 +14,9 @@ export default function MovieCard({ movie }) {
         <Card.Text className='font-weight-light font-size-sm'>
           {abstract}
         </Card.Text>
-        <Button variant="primary">Show more</Button>
+        <Button variant="primary">
+            <Link to={`/movies/${movie.id}`} className='text-white text-decoration-none'>Show more</Link>
+        </Button>
       </Card.Body>
     </Card>
     )
