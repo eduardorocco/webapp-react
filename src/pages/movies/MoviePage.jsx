@@ -57,6 +57,7 @@ export default function MoviePage() {
                         <Card.Body>
                             <Card.Title>{review.name}</Card.Title>
                             <Card.Text>{review.text}</Card.Text>
+                            <Card.Text>{getDots(review.vote)}</Card.Text>
                         </Card.Body>
                     </Card>
                 ))}
