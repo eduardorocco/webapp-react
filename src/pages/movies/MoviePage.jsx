@@ -6,6 +6,9 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircle as fullDot } from '@fortawesome/free-solid-svg-icons/faCircle';
+import { faCircle as emptyDot } from '@fortawesome/free-regular-svg-icons/faCircle';
 
 export default function MoviePage() {
 
@@ -20,6 +23,18 @@ export default function MoviePage() {
 
     useEffect(() => { fetchMovie() }, [id])
 
+    function getDots(avg_vote) {
+            const dots = [];
+            for (let i = 1; i <= 5; i++) {
+                if (i <= avg_vote) {
+                    dots.push(<FontAwesomeIcon icon={fullDot} key={i} />)
+                } else {
+                    dots.push(<FontAwesomeIcon icon={emptyDot} key={i} />)
+                }
+            }
+            return dots;
+        }
+
     console.log(movie.reviews);
     return (
         <Container>
@@ -29,7 +44,7 @@ export default function MoviePage() {
                     <p>{movie.abstract}</p>
                     <p>{movie.director}</p>
                     <p>{movie.release_year}</p>
-                    <p>{movie.avg_vote}</p>
+                    <p>{getDots(movie.avg_vote)}</p>
                 </Col>
                 <Col>
                     <img src={movie.image} alt={movie.title} />
