@@ -9,6 +9,7 @@ import Card from 'react-bootstrap/Card'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle as fullDot } from '@fortawesome/free-solid-svg-icons/faCircle';
 import { faCircle as emptyDot } from '@fortawesome/free-regular-svg-icons/faCircle';
+import ReviewForm from "../../components/ReviewForm"
 
 export default function MoviePage() {
 
@@ -19,49 +20,57 @@ export default function MoviePage() {
         axios.get(`${API_URL}/${id}`).then(response => setMovie(response.data)
         ).catch(error => console.error(error))
     }
-
-
     useEffect(() => { fetchMovie() }, [id])
 
     function getDots(avg_vote) {
-            const dots = [];
-            for (let i = 1; i <= 5; i++) {
-                if (i <= avg_vote) {
-                    dots.push(<FontAwesomeIcon icon={fullDot} key={i} />)
-                } else {
-                    dots.push(<FontAwesomeIcon icon={emptyDot} key={i} />)
-                }
+        const dots = [];
+        for (let i = 1; i <= 5; i++) {
+            if (i <= avg_vote) {
+                dots.push(<FontAwesomeIcon icon={fullDot} key={i} />)
+            } else {
+                dots.push(<FontAwesomeIcon icon={emptyDot} key={i} />)
             }
-            return dots;
         }
+        return dots;
+    }
 
-    console.log(movie.reviews);
+    console.log(id);
     return (
-        <Container>
-            <Row>
-                <h1>{movie.title}</h1>
-                <Col>
-                    <p>{movie.abstract}</p>
-                    <p>{movie.director}</p>
-                    <p>{movie.release_year}</p>
-                    <p>{getDots(movie.avg_vote)}</p>
-                </Col>
-                <Col>
-                    <img src={movie.image} alt={movie.title} />
-                </Col>
-            </Row>
-            <Row>
-                <h2>Reviews</h2>
-                {movie.reviews && movie.reviews.map(review => (
-                    <Card key={review.id}>
-                        <Card.Body>
-                            <Card.Title>{review.name}</Card.Title>
-                            <Card.Text>{review.text}</Card.Text>
-                            <Card.Text>{getDots(review.vote)}</Card.Text>
-                        </Card.Body>
-                    </Card>
-                ))}
-            </Row>  
-        </Container>
+        <>
+            <Container>
+                <Row>
+                    <h1>{movie.title}</h1>
+                    <Col>
+                        <p>{movie.abstract}</p>
+                        <p>{movie.director}</p>
+                        <p>{movie.release_year}</p>
+                        <p>{getDots(movie.avg_vote)}</p>
+                    </Col>
+                    <Col>
+                        <img src={movie.image} alt={movie.title} />
+                    </Col>
+                </Row>
+            </Container>
+            <Container>
+                <Row>
+                    <h3>Reviews</h3>
+                    {movie.reviews && movie.reviews.map(review => (
+                        <Card key={review.id}>
+                            <Card.Body>
+                                <Card.Title>{review.name}</Card.Title>
+                                <Card.Text>{review.text}</Card.Text>
+                                <Card.Text>{getDots(review.vote)}</Card.Text>
+                            </Card.Body>
+                        </Card>
+                    ))}
+                </Row>
+            </Container>
+            <Container>
+                
+                <ReviewForm id={id}/>
+                
+            </Container>
+        </>
+
     )
 }
