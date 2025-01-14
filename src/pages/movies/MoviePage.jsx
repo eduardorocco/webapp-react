@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 const API_URL = 'http://localhost:3000/movies'
@@ -10,15 +10,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle as fullDot } from '@fortawesome/free-solid-svg-icons/faCircle';
 import { faCircle as emptyDot } from '@fortawesome/free-regular-svg-icons/faCircle';
 import ReviewForm from "../../components/ReviewForm"
+import GlobalContext from '../../contexts/globalContext';
 
 export default function MoviePage() {
 
     const { id } = useParams()
     const [movie, setMovie] = useState({})
+    const { setIsLoading } = useContext(GlobalContext);
 
     function fetchMovie() {
+
+        setIsLoading(true)
+
         axios.get(`${API_URL}/${id}`).then(response => setMovie(response.data)
         ).catch(error => console.error(error))
+        .finally(() => setIsLoading(false))
     }
     useEffect(() => { fetchMovie() }, [id])
 

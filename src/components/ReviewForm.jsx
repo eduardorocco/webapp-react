@@ -1,10 +1,9 @@
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import GlobalContext from '../contexts/globalContext';
 
-
-const API_URL = 'http://localhost:3000/movies';
-
+const API_URL = 'http://localhost:3000/movies'
 export default function ReviewForm({ id, onSuccess = () => { } }) {
 
     const initialFormData = {
@@ -16,6 +15,8 @@ export default function ReviewForm({ id, onSuccess = () => { } }) {
     const [formData, setFormData] = useState(initialFormData);
     const [isFormValid, setIsFormValid] = useState(true);
     const [errorMessages, setErrorMessages] = useState([]);
+
+    const { setIsLoading } = useContext(GlobalContext);
 
     useEffect(() => {
         setErrorMessages([]);
@@ -44,21 +45,25 @@ export default function ReviewForm({ id, onSuccess = () => { } }) {
 
         if (!data.name) {
             errors.push('Name is required.');
+            setIsLoading(true)
         }
 
         if (!data.vote || data.vote < 1 || data.vote > 5) {
             errors.push('Vote must be between 1 and 5.');
+            setIsLoading(true)
         }
 
         if (errors.length > 0) {
             setIsFormValid(false);
             setErrorMessages(errors);
+            setIsLoading(true)
             return;
         }
 
         if (!id) {
             setIsFormValid(false);
             setErrorMessages(['Movie ID is missing.']);
+            setIsLoading(true)
             return;
         }
 
@@ -71,6 +76,7 @@ export default function ReviewForm({ id, onSuccess = () => { } }) {
                 console.error(err);
                 setIsFormValid(false);
                 setErrorMessages(['An error occurred while submitting your review.']);
+                setIsLoading(false)
             });
     }
 
@@ -123,6 +129,7 @@ export default function ReviewForm({ id, onSuccess = () => { } }) {
                 </div>
             )}
         </Form>
+        
     );
 }
 
