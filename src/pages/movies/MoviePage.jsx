@@ -67,7 +67,7 @@ export default function MoviePage() {
             </Container>
             <Container>
                 
-                <ReviewForm id={id}/>
+                <ReviewForm id={id} onSuccess={fetchMovie}/>
                 
             </Container>
         </>

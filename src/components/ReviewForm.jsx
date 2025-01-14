@@ -5,22 +5,14 @@ import { useState, useEffect } from 'react';
 
 const API_URL = 'http://localhost:3000/movies';
 
-export default function ReviewForm() {
+export default function ReviewForm({ id, onSuccess = () => { } }) {
+
     const initialFormData = {
         name: '',
         text: '',
         vote: 1
     };
 
-    return (
-        <div>
-            <FormReview initialFormData={initialFormData} />
-        </div>
-    );
-}
-
-function FormReview({id, initialFormData, onSuccess = () => {} }) {
-    console.log(id);
     const [formData, setFormData] = useState(initialFormData);
     const [isFormValid, setIsFormValid] = useState(true);
     const [errorMessages, setErrorMessages] = useState([]);
@@ -32,7 +24,7 @@ function FormReview({id, initialFormData, onSuccess = () => {} }) {
     function onFormChange(e) {
         const { value, name } = e.target;
         setFormData({
-            ...formData, 
+            ...formData,
             [name]: value
         });
     }
@@ -70,7 +62,7 @@ function FormReview({id, initialFormData, onSuccess = () => {} }) {
             return;
         }
 
-        axios.post(`${API_URL}/${movieId}/reviews`, data)
+        axios.post(`${API_URL}/${id}/reviews`, data)
             .then(res => {
                 setFormData(initialFormData);
                 onSuccess();
@@ -84,6 +76,7 @@ function FormReview({id, initialFormData, onSuccess = () => {} }) {
 
     return (
         <Form onSubmit={storeReview}>
+            <h3>Write a review</h3>
             <Form.Group>
                 <Form.Label>Name</Form.Label>
                 <Form.Control
@@ -106,15 +99,17 @@ function FormReview({id, initialFormData, onSuccess = () => {} }) {
             </Form.Group>
             <Form.Group>
                 <Form.Label>Vote</Form.Label>
-                <Form.Control
-                    type="number"
+                <Form.Select
+                    aria-label='vote'
+                    name='vote'
                     value={formData.vote}
-                    onChange={onFormChange}
-                    name="vote"
-                    placeholder="Enter your vote"
-                    min={1}
-                    max={5}
-                />
+                    onChange={onFormChange}>
+                    <option value='5'>5</option>
+                    <option value='4'>4</option>
+                    <option value='3'>3</option>
+                    <option value='2'>2</option>
+                    <option value='1'>1</option>
+                </Form.Select>
             </Form.Group>
             <Button variant="primary" type="submit">
                 Submit
